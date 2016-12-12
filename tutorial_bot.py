@@ -12,14 +12,14 @@ class ircbot():
 		Object to handle a IRC session
 	"""
 
-	def __init__(self, host, port, channel, name, log):
+	def __init__(self, host, port, channel, name, log, session):
 		self.HOST = host
 		self.PORT = port
 		self.CHANNEL = channel
 		self.NICK = name
 		self.IDENT = name
 		self.REALNAME = name
-		self.LOG = channel[1:]+log
+		self.LOG = channel[1:]+str(session)+log
 
 		try:
 			self.irc = socket.socket()
@@ -105,6 +105,8 @@ def parseargs():
 				help='how the bot will be identified in the channel. default=irc_logger_bot')
 	parser.add_argument('-o', '--output', default='log.txt',
 				help='file to write log to. default=stdout')
+	parser.add_argument('-l', '--session', default=1,
+				help='session number. default=1')
 	
 	return parser.parse_args()
 
@@ -115,5 +117,5 @@ if __name__ == '__main__':
 	opt = parseargs()
 
 	# Create bot object and run it!
-	bot = ircbot(opt.server, opt.port, opt.channel, opt.name, opt.output)
+	bot = ircbot(opt.server, opt.port, opt.channel, opt.name, opt.output, opt.session)
 	bot.run()
